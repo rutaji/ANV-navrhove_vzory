@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ANV/ANV.iml" filepath="$PROJECT_DIR$/ANV/ANV.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ANV-navrhove_vzory.iml" filepath="$PROJECT_DIR$/.idea/ANV-navrhove_vzory.iml" />
+    </modules>
+  </component>
+</project>
