@@ -1,9 +1,12 @@
-package test;
+package main;
 
 
-import main.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Field;
 
 class CafeConfigTest {
 
@@ -32,5 +35,11 @@ class CafeConfigTest {
         CafeConfig instace1 = CafeConfig.getInstance();
         CafeConfig instace2 = CafeConfig.getInstance();
         Assertions.assertEquals(instace1,instace2);
+    }
+    @AfterEach
+    public void resetSingleton() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Field instance = CafeConfig.class.getDeclaredField("Instance");
+        instance.setAccessible(true);
+        instance.set(null, null);
     }
 }

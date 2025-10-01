@@ -1,12 +1,19 @@
 package main;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+
+import java.lang.reflect.Field;
+
 public class CafeConfig {
     private CafeConfig() {
     }
     private static CafeConfig Instance = null;
     private String CafeName = "default name";
+
     public String GetCafeName(){return CafeName;}
-    public Boolean SetCafeName(String Value) //thread unsafe
+
+    public boolean SetCafeName(String Value) //thread unsafe
     {
         if(Value == null){return false;}
         CafeName = Value;
@@ -20,5 +27,4 @@ public class CafeConfig {
         }
         return Instance;
     }
-
 }
