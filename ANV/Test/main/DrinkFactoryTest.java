@@ -1,9 +1,10 @@
 package main;
 
+import main.Factory.Coffee;
+import main.Factory.DrinkFactory;
+import main.Factory.IDrink;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DrinkFactoryTest {
 

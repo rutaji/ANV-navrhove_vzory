@@ -1,4 +1,191 @@
 \documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{orange}{rgb}{0.8,0.5,0.04}
+\definecolor{pink}{rgb}{0.7,0.1,0.8}
+\definecolor{greendark}{rgb}{0,0.6,0}
+\def\subsectionautorefname{}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\ttfamily},
+  numbers=none,
+  keywordstyle=\color{pink},
+  commentstyle=\color{greendark},
+  stringstyle=\color{orange},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
 \begin{document}
-sdd
+\section{O návrhových vzorech}
+Když máte jen kladivo, všechno vypadá jako hřebík.
+Berličky pro slabý programovací jazyk - Například vzor Strategy lze v mnoha moderních programovacích jazycích realizovat prostě pomocí anonymní
+(lambda) funkce
+
+\subsection{Rozdělení podle záměru podle záměru}
+\subsubsection{Creational patterns} 
+Starají se o vytváření objektů.
+\begin{itemize}
+    \item \hyperref[Singleton]{Singleton}
+    \item \hyperref[Factory Method]{Factory Method}
+    \item  
+    \item  
+    \item  
+    \item  
+    \item  
+\end{itemize}
+\subsubsection{Structural patterns} 
+Vysvětlují skládání/vztah objektů a tříd do větších celků.
+
+\begin{itemize}
+    \item Flyweight
+    \item  
+    \item  
+    \item  
+    \item  
+    
+\end{itemize}
+
+\subsubsection{Behavioral patterns}
+Popisují komunikaci a rozdělení zodpovědnosti mezi objekty.
+\begin{itemize}
+    \item Strategy
+    \item  
+    \item  
+    \item  
+    \item  
+    \item  
+\end{itemize}
+
+
+\section{Paterny}
+
+\subsection{Factory Method}\label{Factory Method}
+Umožnuje vytvářet objekty pomocí metody namísto konstruktoru. Vytvářené objekty sdílí stejný interface, 
+což umožnuje metodě vracet různé objekty. Metoda budto může vracet různé objekty podle dodaných parametrů, anebo můžeme od Factory (třída, která obsahuje faktory metodu)
+dědit další factory, které vrací různé objekty. Používat interface pro továrnu umožnuje ji lechce vyměnit při změně kódu anebo při testování.
+Umožnuje mít veškerý kód pro vytváření objektu na jednom místě a lechce měnit jaký objekt bude vytvořen na více místech v kódu.
+\medskip \newline %
+Výhody:
+\begin{itemize}
+  \item Snižuje propojení mezi třídami.
+  \item Single Responsibility Principle.
+  \item Kód je jednoduše rozšířitelný. Můžeme přidávat nové produkty a továrny bez změny předchozího kódu. Knihovna používající Factory method je mnohem více rozšířitelná.
+  \item Snižuje duplikaci kódu okolo vytváření objektu.
+  \item Umožnuje vracett už existující instanci namísto vytváření nové.
+\end{itemize}
+Nevýhody:
+\begin{itemize}
+  \item Továrna může vracet pouze objekty dědíci daný interface.
+  \item Vytváření velkého množství interfaců a podtříd.
+\end{itemize}
+\medskip
+
+\subsubsection{Relations with Other Patterns}
+\begin{itemize}
+  \item Factory method se vyvíjí do Abstract Factory, Prototype, Builder.
+  \item Factory method se používá k vracení různých Iterátorů.
+  \item Factory method je druh Template Method. Zároveň Factory může být součástí větší Template Method.
+\end{itemize}
+\subsubsection{More info}
+\begin{itemize}
+  \item https://refactoring.guru/design-patterns/factory-method
+\end{itemize}
+%----------------------------------------------------------------------------------------------------------------
+\subsection{Singleton} \label{Singleton}
+Používá se pokud je v programu potřeba aby existovala jediná instance určité třídy. K této třídě také poskytuje globální přístup. Tím porušuje zákon Single Responsibility, jelikož řeší 2 věci najednou.
+Často se používá u konfigurací, přístupu k souboru nebo databázi. Jedná se o globální stav a všechy objekty na které obsahuje reference jsou také globální stav =$>$ je těžké je mockovat v testech. Podobné problémy jako globální proměné. 
+Singleton (velké S) je patern, zatímco singleton (malé s) je třída která by měla míti pouze jednu instanci.
+\medskip \newline 
+%
+Výhody:
+\begin{itemize}
+  \item Lazy vytváření.
+  \item Pouze jeden existující objekty.
+  \item Jednoduché řešení (na začátku).
+\end{itemize}
+Nevýhody:
+\begin{itemize}
+  \item Poskytuje globální přístup k proměným, praktivké, ale velmi nebezpečné.
+   Může zakrývat špatný návrh kódu. Může vytvářet zbytečne velké závislosti mezi třídami.
+  \item Vyžaduje úpravu pro multi-thread safety.
+  \item Pokud možno je lepší používat dependency injection.
+  \item Špatně se testuje. Jelikož je singleton měnící se statická hodnota, tak si zachová 
+  změny mezi testy (\href{https://testing.googleblog.com/2008/08/by-miko-hevery-so-you-join-new-project.html}{Singletons are pathological liars.}). Je potřeba ho mezi testy resetovat mezi testy, testy také nemohou běžet paralerně. Stejně tak mokování může být obtížné.
+  \item Zvětšuje propojení mezi třídami.
+  \item Může skrývat co se děje v kódu a skrývat propojení mezi třídami.
+\end{itemize}
+\medskip
+
+Častou chybou je následující kód, ve kterém se snažíme vytvořit třídu CreditCard. 
+Jenže třída CreditCard nefunguje pokud nejdříve nespustíme OfflineQueue.init() a ta potřebuje nejdříve spustit CreditCardProcessor.init();. 
+V kódu nic nenaznačuje, že by na sobě třídy byli závislé jelikož je to skryté.  
+\begin{lstlisting}
+CreditCardProcessor.init();
+OfflineQueue.init();
+CreditCard c =  new CreditCard(  "1234 5678 9012 3456", 5, 2008);
+c.charge(100);
+Database.init(); 
+\end{lstlisting}
+Je lepší závislosti ukázat tím, že je budeme vyžadovat předat k operaci. 
+\begin{lstlisting}
+  Database db = Database();
+  OfflineQueue q = OfflineQueue(db);
+  CreditCardProcessor ccp = new CreditCardProcessor(q);
+  CreditCard c =  new CreditCard(  "1234 5678 9012 3456", 5, 2008);
+  c.charge(ccp, 100);
+\end{lstlisting}
+\href{https://youtu.be/-FRm3VPhseI?si=2yfLyOmljdnVgoLU&t=1133}{celý příklad}
+
+\subsubsection{Relations with Other Patterns}
+%todo
+\subsubsection{More info}
+\begin{itemize}
+  \item https://www.youtube.com/watch?v=-FRm3VPhseI
+  \item https://testing.googleblog.com/2008/08/by-miko-hevery-so-you-join-new-project.html
+\end{itemize}
+%---------------------------------------------------------------------------------------------------------
+\section{Anti-Paterny}
+\subsection{spaghetti code}
+
+\subsection{lava flow}
+
+\subsection{accidental complexity}
+
+\subsection{God Object}
+
+\subsection{hard coding}
+
+\subsection{magic numbers}
+
+\subsection{Too many responsibilities}
+
+\section{Zdroje}
+\subsection{Použité zdroje}
+\begin{itemize}
+  \item Prezentace ANV 2025
+  \item https://testing.googleblog.com/2008/08/by-miko-hevery-so-you-join-new-project.html
+  \item https://www.youtube.com/watch?v=-FRm3VPhseI
+  \item https://refactoring.guru/design-patterns/factory-method
+  \item https://en.wikipedia.org/wiki/Software\_design\_pattern
+  \item more refactoring.guru ... more wikipedia ....
+\end{itemize}
+\subsection{Doporučené zdroje}
+Zdroje doporučené učiteli, použitými zdroji anebo jinak užitečné zdroje na toto téma které zatím nebyli plně vyčerpány.
+\begin{itemize}
+  \item Design Patterns: Elements of Reusable Object-Oriented Software
+  \item Patterns and Antipatterns - Andrew Koenig
+  \item Roberta C. Martina Clean Code: A Handbook of Agile Software
+Craftsmanship
+
+\end{itemize}
 \end{document}

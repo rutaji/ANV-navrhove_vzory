@@ -1,4 +1,4 @@
-package main;
+package main.Factory;
 
 public class Water implements IDrink {
     public Water(){

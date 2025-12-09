@@ -1,9 +1,4 @@
-package main;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-
-import java.lang.reflect.Field;
+package main.Singleton;
 
 public class CafeConfig {
     private CafeConfig() {
