@@ -1,5 +1,6 @@
 \documentclass{article}
 
+\usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
@@ -68,6 +69,17 @@ Popisují komunikaci a rozdělení zodpovědnosti mezi objekty.
 
 
 \section{Paterny}
+\subsection{Factory/ simple Factory}
+Jednoduší forma Factory Method. Factory method používá jeden objekt továrny pro vracení jedné implementace, zatímco
+simple Factory vrací vše jednou metodou anebp několika metodami, ale pořád vše v jednom objektu.
+ Výhody:
+\begin{itemize}
+  \item Snižuje počet tříd a Interafaců.
+\end{itemize}
+Nevýhody:
+\begin{itemize}
+  \item Uzavřené k rozšíření narozdíl od Factory method.
+\end{itemize}
 
 \subsection{Factory Method}\label{Factory Method}
 Umožnuje vytvářet objekty pomocí metody namísto konstruktoru. Vytvářené objekty sdílí stejný interface, 
@@ -89,7 +101,6 @@ Nevýhody:
   \item Vytváření velkého množství interfaců a podtříd.
 \end{itemize}
 \medskip
-
 \subsubsection{Relations with Other Patterns}
 \begin{itemize}
   \item Factory method se vyvíjí do Abstract Factory, Prototype, Builder.
@@ -153,7 +164,35 @@ Je lepší závislosti ukázat tím, že je budeme vyžadovat předat k operaci.
   \item https://www.youtube.com/watch?v=-FRm3VPhseI
   \item https://testing.googleblog.com/2008/08/by-miko-hevery-so-you-join-new-project.html
 \end{itemize}
+\subsection{Builder}
+Faktory method která umožnuje vytvářet složitější objekty. Nastavujeme vlasnosti objektů různými metodami. Builder drží objektu a předá ho nakonci při zavolání finální metody. Pokud často voláme určité nastavení daného buildra můžeme vytvořit Director objekt, ktrý obsahuje metodu na zavolání těchto metod v daném pořadí.
+\begin{figure}[h]
+  \includegraphics[width=7cm]{pictures/builder.png}
+  \caption{A boat.}
+  \label{fig:boat1}
+\end{figure}
+Výhody:
+\begin{itemize}
+  \item Lazy vytváření.
+  \item Pouze jeden existující objekty.
+  \item Jednoduché řešení (na začátku).
+\end{itemize}
+Nevýhody:
+\begin{itemize}
+  \item Poskytuje globální přístup k proměným, praktivké, ale velmi nebezpečné.
+   Může zakrývat špatný návrh kódu. Může vytvářet zbytečne velké závislosti mezi třídami.
+  \item Vyžaduje úpravu pro multi-thread safety.
+  \item Pokud možno je lepší používat dependency injection.
+  \item Špatně se testuje. Jelikož je singleton měnící se statická hodnota, tak si zachová 
+  změny mezi testy (\href{https://testing.googleblog.com/2008/08/by-miko-hevery-so-you-join-new-project.html}{Singletons are pathological liars.}). Je potřeba ho mezi testy resetovat mezi testy, testy také nemohou běžet paralerně. Stejně tak mokování může být obtížné.
+  \item Zvětšuje propojení mezi třídami.
+  \item Může skrývat co se děje v kódu a skrývat propojení mezi třídami.
+\end{itemize}
+\medskip
+
 %---------------------------------------------------------------------------------------------------------
+
+
 \section{Anti-Paterny}
 \subsection{spaghetti code}
 
